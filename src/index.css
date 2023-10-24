@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .AdminNavBar {
+    @apply w-[100%] min-h-[60px] z-10 flex flex-col transition-[height] overflow-clip;
+  }
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  -moz-and-webkit-prefixes: none;
+  font-family: "Roboto", sans-serif;
+}
+
+/* styled-scrollbar-dark */
+.styled-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #2d404b;
+}
+
+.styled-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* styled-scrollbar-light */
+
+.styled-scrollbar-light::-webkit-scrollbar {
+  width: 4px;
+}
+
+.styled-scrollbar-light::-webkit-scrollbar-thumb {
+  background-color: slategray;
+}
+
+.styled-scrollbar-light {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
