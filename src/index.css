@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
+@layer utilities {
   .AdminNavBar {
-    @apply w-[100%] min-h-[60px] z-10 flex flex-col transition-[height] overflow-clip;
+    @apply w-[100%] min-h-[60px] z-10 flex flex-col transition-[height] overflow-hidden !important;
   }
 }
 

@@ -12,9 +12,11 @@ export default function Admin({ children, title }) {
         <>
 
             <div
+                
                 className={
-                    `w-[10%] min-h-[100dvh] bg-black fixed text-white overflow-hidden overflow-y-auto styled-scrollbar-light 
-                     max-sm:AdminNavBar ${showMenu ? 'h-[300px]' : 'h-[60px]'}`
+                    `w-[13%] min-h-[100dvh] bg-black fixed text-white overflow-hidden overflow-y-auto styled-scrollbar-light 
+                    max-2xl:w-[20%] 
+                    max-lg:AdminNavBar ${showMenu ? 'h-[300px]' : 'h-[60px]'}`
                 }
 
             >
@@ -22,7 +24,7 @@ export default function Admin({ children, title }) {
             </div>
 
 
-            <div className='p-5 w-[90%] absolute right-0 max-sm:w-full  max-sm:top-[60px]'>
+            <div className='p-5 w-[87%] absolute right-0 max-2xl:w-[80%] max-lg:w-full max-lg:top-[60px]'>
                 {children}
             </div>
         </>

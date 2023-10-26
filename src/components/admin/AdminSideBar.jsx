@@ -16,7 +16,7 @@ export default function AdminSideBar({ showMenu, setShowMenu }) {
 
         <>
             {/* Logo */}
-            <div className='ml-2 mt-2 w-full flex justify-between items-center max-sm:m-0'>
+            <div className='ml-2 mt-2 w-full flex justify-between items-center max-lg:m-0'>
                 {/* <img src={Logo} alt="" className='w-[40px] h-[40px]' /> */}
 
 
@@ -25,7 +25,7 @@ export default function AdminSideBar({ showMenu, setShowMenu }) {
                     <p className='relative top-[2px]'>azaar</p>
                 </h1>
 
-                <FiMenu className='text-3xl mr-2 hidden relative top-1 max-sm:block' onClick={() => showMenu ? setShowMenu(false) : setShowMenu(true)} />
+                <FiMenu className='text-3xl mr-2 hidden relative top-1 max-lg:block' onClick={() => showMenu ? setShowMenu(false) : setShowMenu(true)} />
             </div>
 
             <div className={`ml-4 mt-10 space-y-3 w-full flex flex-col bg-black`}>
