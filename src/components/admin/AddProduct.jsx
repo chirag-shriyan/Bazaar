@@ -2,6 +2,8 @@ import React, { useRef } from 'react'
 import Admin from './Admin'
 import { Button } from '@mui/material';
 import { useState } from 'react';
+import { FirebaseStorage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 export default function AddProduct() {
 
@@ -28,27 +30,59 @@ export default function AddProduct() {
 
     }
 
-    const createProduct = (e) => {
+    const uploadImage = async (image) => {
+
+        if (new RegExp('image/').test(image.type)) {
+            const imageName = `${new Date().toJSON()}-${image.name}`;
+            const ImageRef = ref(FirebaseStorage, `Product Images/${imageName}`);
+
+            await uploadBytes(ImageRef, image);
+            const ImageUrl = await getDownloadURL(ref(FirebaseStorage, `Product Images/${imageName}`));
+
+            return ImageUrl
+        }
+        else {
+            alert('Your image should be a image file');
+            imageRef.current.value = '';
+            setProductImage(null);
+        }
+    }
+
+    const createProduct = async (e) => {
         e.preventDefault();
 
         if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImage) {
+            console.log('http://localhost:4000/api/product');
+            console.log(import.meta.env.VITE_API_URL + '/api/product');
 
-            const product = {
-                name: productName,
-                description: productDescription,
-                price: productPrice,
-                quantity: productQuantity,
-                Category: productCategories,
-                image: productImage
-            }
-            console.log(product);
+            let res = await fetch(import.meta.env.VITE_API_URL + '/api/product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        "name": productName,
+                        "description": productDescription,
+                        "price": productPrice,
+                        "quantity": productQuantity,
+                        "image": await uploadImage(productImage),
+                        "categories": productCategories
+                    }
+                )
+
+            });
+
+            res = await res.json();
+            console.log(res);
+
             setProductName('');
             setProductDescription('');
             setProductPrice(0);
             setProductQuantity(0);
             setProductCategories(defaultSelected);
             setProductImage(null);
-            imageRef.current.value = ''
+            imageRef.current.value = '';
         }
     }
 
@@ -98,7 +132,7 @@ export default function AddProduct() {
 
 
                 {/* <input type="" placeholder='Product category' className='p-1 border' /> */}
-                <label htmlFor="categories" className='font-bold text-xl'>Product categories</label>
+                <label htmlFor="categories" className='font-bold text-xl'>Product category</label>
                 <select
                     id='categories'
                     className=' w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
