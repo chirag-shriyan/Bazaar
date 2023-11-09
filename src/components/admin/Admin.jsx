@@ -12,9 +12,9 @@ export default function Admin({ children, title }) {
         <>
 
             <div
-                
+
                 className={
-                    `w-[13%] min-h-[100dvh] bg-black fixed text-white overflow-hidden overflow-y-auto styled-scrollbar-light 
+                    `w-[13%] min-h-[100dvh] bg-black fixed text-white overflow-hidden overflow-y-auto styled-scrollbar-light
                     max-2xl:w-[20%] 
                     max-lg:AdminNavBar ${showMenu ? 'h-[300px]' : 'h-[60px]'}`
                 }

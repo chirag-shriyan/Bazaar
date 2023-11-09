@@ -42,3 +42,16 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* To remove arrow from number input */
+/* Chrome, Safari, Edge, Opera */
+.noArrow::-webkit-outer-spin-button,
+.noArrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.noArrow[type=number] {
+  -moz-appearance: textfield;
+}

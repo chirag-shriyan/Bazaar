@@ -5,18 +5,27 @@ import AdminBanner from "./components/admin/AdminBanner";
 import AllProducts from "./components/admin/AllProducts";
 import AddProduct from "./components/admin/AddProduct";
 import AdminSettings from "./components/admin/AdminSettings";
-
+import LoadingBar from "react-top-loading-bar";
+import useTopLoading from "./contexts/topLoadingContext";
+import BackDrop from "./components/states/BackDrop";
 
 
 function App() {
 
+  const { topLoadingProgress, setTopLoadingProgress } = useTopLoading();
   const user = true;
   return (
     <>
+
+      {topLoadingProgress > 0 && <BackDrop />}
+      <LoadingBar
+        color='#0a77fa'
+        className="z-[1000]"
+        progress={topLoadingProgress}
+        onLoaderFinished={() => setTopLoadingProgress(0)}
+      />
+
       <Routes>
-
-
-
 
         {user &&
           <>
@@ -29,7 +38,7 @@ function App() {
 
         }
 
-        <Route path="/:id*" element={<NotFound />} />
+        <Route path="/:path/*" element={<NotFound />} />
       </Routes>
 
     </>

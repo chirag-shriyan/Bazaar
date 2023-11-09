@@ -4,9 +4,11 @@ import { Button } from '@mui/material';
 import { useState } from 'react';
 import { FirebaseStorage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import useTopLoading from '../../contexts/topLoadingContext';
 
 export default function AddProduct() {
 
+    const { setTopLoadingProgress } = useTopLoading();
     const categories = ['Shirt', 'Pant', 'T-Shirt', 'Jeans'];
     const defaultSelected = '- - Select - -'
 
@@ -16,6 +18,7 @@ export default function AddProduct() {
     const [productQuantity, setProductQuantity] = useState(0);
     const [productCategories, setProductCategories] = useState(defaultSelected);
     const [productImage, setProductImage] = useState(null);
+    const [error, setError] = useState('');
 
     const imageRef = useRef();
 
@@ -31,8 +34,9 @@ export default function AddProduct() {
     }
 
     const uploadImage = async (image) => {
-
+        setError('');
         if (new RegExp('image/').test(image.type)) {
+            setTopLoadingProgress(30);
             const imageName = `${new Date().toJSON()}-${image.name}`;
             const ImageRef = ref(FirebaseStorage, `Product Images/${imageName}`);
 
@@ -42,18 +46,27 @@ export default function AddProduct() {
             return ImageUrl
         }
         else {
-            alert('Your image should be a image file');
+            setError('Your image should be a image file');
             imageRef.current.value = '';
             setProductImage(null);
+            setTopLoadingProgress(100);
+            return null
         }
     }
 
     const createProduct = async (e) => {
         e.preventDefault();
+        setError('');
 
-        if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImage) {
-            console.log('http://localhost:4000/api/product');
-            console.log(import.meta.env.VITE_API_URL + '/api/product');
+
+        const productImageUrl = productImage ? await uploadImage(productImage) : setError('Image is required');
+        // console.log(productImageUrl);
+        if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImageUrl) {
+            console.log(productImageUrl);
+            setTopLoadingProgress(30);
+
+            // console.log('http://localhost:4000/api/product');
+            // console.log(import.meta.env.VITE_API_URL + '/api/product');
 
             let res = await fetch(import.meta.env.VITE_API_URL + '/api/product', {
                 method: 'POST',
@@ -66,12 +79,14 @@ export default function AddProduct() {
                         "description": productDescription,
                         "price": productPrice,
                         "quantity": productQuantity,
-                        "image": await uploadImage(productImage),
+                        "image": productImageUrl,
                         "categories": productCategories
                     }
                 )
 
             });
+
+            setTopLoadingProgress(70);
 
             res = await res.json();
             console.log(res);
@@ -83,14 +98,35 @@ export default function AddProduct() {
             setProductCategories(defaultSelected);
             setProductImage(null);
             imageRef.current.value = '';
+
+            setTopLoadingProgress(100);
         }
+        else {
+            setError('');
+            if (!productName) {
+                setError('Name is required');
+            }
+            else if (!productDescription) {
+                setError('Description is required');
+            }
+            else if (!productPrice) {
+                setError('Price is required and should be greater than 0');
+            }
+            else if (!productQuantity) {
+                setError('Quantity is required and should be greater than 0');
+            }
+            else if (productCategories === defaultSelected) {
+                setError('Categories is required');
+            }
+        }
+
     }
 
     return (
 
         <Admin title={'Add Product'}>
 
-            <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e); createProduct(e); }}>
+            <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
 
                 <label htmlFor="name" className='font-bold text-xl'>Product name</label>
                 <input autoFocus type='text' id='name' placeholder='Product name'
@@ -110,17 +146,17 @@ export default function AddProduct() {
 
                 <label htmlFor="price" className='font-bold text-xl'>Product price</label>
                 <input type='number' id='price' placeholder='Product price'
-                    className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
+                    className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px] noArrow'
                     value={productPrice}
-                    onChange={(e) => setProductPrice(e.target.value)}
+                    onChange={(e) => setProductPrice(e.target.value >= 0 ? e.target.value : 0)}
                 />
 
 
                 <label htmlFor="quantity" className='font-bold text-xl'>Product quantity</label>
                 <input type='number' id='quantity' placeholder='Product quantity'
-                    className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
+                    className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px] noArrow'
                     value={productQuantity}
-                    onChange={(e) => setProductQuantity(e.target.value)}
+                    onChange={(e) => setProductQuantity(e.target.value >= 0 ? e.target.value : 0)}
                 />
 
                 <label htmlFor="image" className='font-bold text-xl'>Product image</label>
@@ -146,6 +182,9 @@ export default function AddProduct() {
                     }
                     <option>- - Select - -</option>
                 </select>
+
+                {/* Errors */}
+                {error && <b className='text-red-600'>{error}</b>}
 
                 <Button variant='contained' className='!mt-4 h-10' onClick={createProduct}>Create Product</Button>
 
