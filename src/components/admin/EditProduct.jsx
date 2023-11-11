@@ -1,17 +1,20 @@
-import React, { useRef } from 'react'
-import Admin from './Admin'
-import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useParams } from "react-router-dom"
+import Admin from "./Admin";
+import useTopLoading from "../../contexts/topLoadingContext";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@mui/material";
 import { FirebaseStorage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import useTopLoading from '../../contexts/topLoadingContext';
 
-export default function AddProduct() {
+export default function EditProduct() {
+
+    const { id: productId } = useParams();
 
     const { setTopLoadingProgress } = useTopLoading();
     const categories = ['Shirt', 'Pant', 'T-Shirt', 'Jeans'];
     const defaultSelected = '- - Select - -'
 
+    const [product, setProduct] = useState();
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [productPrice, setProductPrice] = useState(0);
@@ -31,6 +34,12 @@ export default function AddProduct() {
             nextElement.focus();
         }
 
+    }
+
+    const getProducts = async () => {
+        let res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${productId}`);
+        res = await res.json();
+        setProduct(res.data);
     }
 
     const uploadImage = async (image) => {
@@ -53,18 +62,19 @@ export default function AddProduct() {
         }
     }
 
-    const createProduct = async (e) => {
+
+    const updateProduct = async (e) => {
         e.preventDefault();
         setError('');
 
-        if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImage) {
+        if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected) {
 
             setTopLoadingProgress(30);
-            const productImageUrl = await uploadImage(productImage);
+            const productImageUrl = productImage && await uploadImage(productImage);
 
             if (productImageUrl) {
-                let res = await fetch(import.meta.env.VITE_API_URL + '/api/products', {
-                    method: 'POST',
+                let res = await fetch(import.meta.env.VITE_API_URL + `/api/products/${productId}`, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -84,19 +94,32 @@ export default function AddProduct() {
                 setTopLoadingProgress(70);
 
                 res = await res.json();
-                console.log(res);
-
                 setTopLoadingProgress(100);
-
-                setProductName('');
-                setProductDescription('');
-                setProductPrice(0);
-                setProductQuantity(0);
-                setProductCategories(defaultSelected);
-                setProductImage(null);
-                imageRef.current.value = '';
-
             }
+            else {
+                let res = await fetch(import.meta.env.VITE_API_URL + `/api/products/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            "name": productName,
+                            "description": productDescription,
+                            "price": productPrice,
+                            "quantity": productQuantity,
+                            "categories": productCategories
+                        }
+                    )
+
+                });
+
+                setTopLoadingProgress(70);
+
+                res = await res.json();
+                setTopLoadingProgress(100);
+            }
+
 
         }
         else {
@@ -113,20 +136,32 @@ export default function AddProduct() {
             else if (!productQuantity) {
                 setError('Quantity is required and should be greater than 0');
             }
-            else if (!productImage) {
-                setError('Image is required');
-            }
             else if (productCategories === defaultSelected) {
                 setError('Categories is required');
             }
 
         }
-
     }
+
+    useEffect(() => {
+        getProducts();
+
+    }, [])
+
+    useEffect(() => {
+        if (product) {
+            setProductName(product.name);
+            setProductDescription(product.description);
+            setProductPrice(product.price);
+            setProductQuantity(product.quantity);
+            setProductCategories(product.categories);
+        }
+
+    }, [product])
 
     return (
 
-        <Admin title={'Add Product'}>
+        <Admin title={'Edit Product'}>
 
             <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
 
@@ -188,7 +223,7 @@ export default function AddProduct() {
                 {/* Errors */}
                 {error && <b className='text-red-600'>{error}</b>}
 
-                <Button variant='contained' className='!mt-4 h-10' onClick={createProduct}>Create Product</Button>
+                <Button variant='contained' className='!mt-4 h-10' onClick={updateProduct}>Update Product</Button>
 
                 <button className='hidden'></button>
 

@@ -8,6 +8,7 @@ import AdminSettings from "./components/admin/AdminSettings";
 import LoadingBar from "react-top-loading-bar";
 import useTopLoading from "./contexts/topLoadingContext";
 import BackDrop from "./components/states/BackDrop";
+import EditProduct from "./components/admin/EditProduct";
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="/admin/banner" element={<AdminBanner />} />
             <Route path="/admin/products" element={<AllProducts />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/admin/edit/:id" element={<EditProduct />} />
           </>
 
         }
