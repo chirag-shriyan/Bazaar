@@ -37,10 +37,11 @@ function App() {
             <Route path="/admin/settings" element={<AdminSettings />} />
             <Route path="/admin/edit/:id" element={<EditProduct />} />
           </>
-
         }
 
-        <Route path="/:path/*" element={<NotFound />} />
+        <Route path="/" element={<h1>Home</h1>} />
+
+        <Route path="/*" element={<NotFound />} />
       </Routes>
 
     </>

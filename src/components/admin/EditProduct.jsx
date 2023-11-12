@@ -1,5 +1,6 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import Admin from "./Admin";
+import NotFound from "../NotFound";
 import useTopLoading from "../../contexts/topLoadingContext";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@mui/material";
@@ -161,7 +162,7 @@ export default function EditProduct() {
 
     return (
 
-        <Admin title={'Edit Product'}>
+        product ?
 
             <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
 
@@ -224,10 +225,16 @@ export default function EditProduct() {
                 {error && <b className='text-red-600'>{error}</b>}
 
                 <Button variant='contained' className='!mt-4 h-10' onClick={updateProduct}>Update Product</Button>
+                <Link to={'/admin/products'}>
+                    <Button variant='contained' color='error' className='!mt-2 w-full h-10'>Cancel Update</Button>
+                </Link>
 
                 <button className='hidden'></button>
 
             </form>
-        </Admin>
+
+
+            :
+            <NotFound />
     )
 }
