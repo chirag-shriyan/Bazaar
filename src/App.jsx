@@ -1,21 +1,45 @@
-import { Route, Routes } from "react-router-dom";
-import NotFound from "./components/NotFound";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+import LoadingBar from "react-top-loading-bar";
+import useTopLoading from "./contexts/topLoadingContext";
+import useAuth from "./contexts/authContext";
+
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminBanner from "./components/admin/AdminBanner";
 import AllProducts from "./components/admin/AllProducts";
 import AddProduct from "./components/admin/AddProduct";
 import AdminOrders from "./components/admin/AdminOrders";
-import LoadingBar from "react-top-loading-bar";
-import useTopLoading from "./contexts/topLoadingContext";
 import BackDrop from "./components/states/BackDrop";
 import EditProduct from "./components/admin/EditProduct";
 import Home from "./components/Home";
+import Login from "./components/Login";
+import NotFound from "./components/NotFound";
+import Signup from "./components/Signup";
+
+
 
 
 function App() {
 
   const { topLoadingProgress, setTopLoadingProgress } = useTopLoading();
+  const { isLoggedIn, checkIsLoggedIn } = useAuth();
   const user = true;
+  const pathname = location.pathname;
+  const Navigate = useNavigate();
+
+
+
+
+  useEffect(() => {
+
+    checkIsLoggedIn();
+    if (isLoggedIn && pathname === '/login' || pathname === '/signup') {
+      Navigate('/');
+    }
+
+  }, [isLoggedIn]);
+
   return (
     <>
 
@@ -40,7 +64,9 @@ function App() {
           </>
         }
 
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
         <Route path="/*" element={<NotFound />} />
       </Routes>
