@@ -8,10 +8,10 @@ import RootContextProvider from './contexts/RootContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   //<React.StrictMode>
-  <RootContextProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <RootContextProvider>
       <App />
-    </BrowserRouter>
-  </RootContextProvider>
+    </RootContextProvider>
+  </BrowserRouter>
   //</React.StrictMode>,
 )

@@ -4,11 +4,12 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminBanner from "./components/admin/AdminBanner";
 import AllProducts from "./components/admin/AllProducts";
 import AddProduct from "./components/admin/AddProduct";
-import AdminSettings from "./components/admin/AdminSettings";
+import AdminOrders from "./components/admin/AdminOrders";
 import LoadingBar from "react-top-loading-bar";
 import useTopLoading from "./contexts/topLoadingContext";
 import BackDrop from "./components/states/BackDrop";
 import EditProduct from "./components/admin/EditProduct";
+import Home from "./components/Home";
 
 
 function App() {
@@ -34,12 +35,12 @@ function App() {
             <Route path="/admin/add-product" element={<AddProduct />} />
             <Route path="/admin/banner" element={<AdminBanner />} />
             <Route path="/admin/products" element={<AllProducts />} />
-            <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="/admin/edit/:id" element={<EditProduct />} />
           </>
         }
 
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<Home/>} />
 
         <Route path="/*" element={<NotFound />} />
       </Routes>

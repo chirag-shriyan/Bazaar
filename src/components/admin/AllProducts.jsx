@@ -44,8 +44,7 @@ export default function AllProducts() {
 
     useEffect(() => {
         getProducts();
-    }, [])
-
+    }, []);
 
     useEffect(() => {
 
@@ -53,10 +52,11 @@ export default function AllProducts() {
             if (search && search !== '') {
                 setTopLoadingProgress(100);
                 getSearchProducts(search);
-            } else {
+            }
+            else if (search === '') {
                 getProducts();
             }
-        }, 500);
+        }, 700);
 
         return () => clearTimeout(timer);
     }, [search]);
