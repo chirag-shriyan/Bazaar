@@ -23,7 +23,7 @@ import Signup from "./components/Signup";
 function App() {
 
   const { topLoadingProgress, setTopLoadingProgress } = useTopLoading();
-  const { isLoggedIn, checkIsLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const user = true;
   const pathname = location.pathname;
   const Navigate = useNavigate();
@@ -33,12 +33,12 @@ function App() {
 
   useEffect(() => {
 
-    checkIsLoggedIn();
-    if (isLoggedIn && pathname === '/login' || pathname === '/signup') {
+    if (isLoggedIn && (pathname === '/login' || pathname === '/signup')) {
       Navigate('/');
     }
 
   }, [isLoggedIn]);
+
 
   return (
     <>

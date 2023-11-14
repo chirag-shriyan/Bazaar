@@ -1,26 +1,48 @@
 import { Button } from '@mui/material';
 import { useState } from 'react'
 import useAuth from '../contexts/authContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
-    const { login } = useAuth();
+    const Navigate = useNavigate();
+    const { login, checkIsLoggedIn } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+
+    const goToNextInput = (e) => {
+        e.preventDefault();
+        const currentElement = document.activeElement;
+        const nextElement = currentElement.nextElementSibling;
+
+        if (nextElement && currentElement.value.trim().length !== 0) {
+            nextElement.focus();
+        }
+
+    }
+
     const handleLogin = async () => {
         const res = await login(email, password);
-        console.log(res);
-        setError(res.message);
+
+        if (res.status === 200) {
+            const res = await checkIsLoggedIn();
+            console.log(res);
+            Navigate('/');
+        } else {
+            setError(res.message);
+        }
     }
 
     return (
-        <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
+        <form className='mt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>
+
+            <h1 className='text-4xl font-bold mb-5'>Login</h1>
 
             <label htmlFor="email" className='font-bold text-xl'>Email</label>
             <input autoFocus type='email' id='email' placeholder='Your Email'
+                autoComplete='email'
                 className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -29,6 +51,7 @@ export default function Login() {
 
             <label htmlFor="password" className='font-bold text-xl'>Password</label>
             <input type='password' id='password' placeholder='Your Password'
+                autoComplete='current-password'
                 className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

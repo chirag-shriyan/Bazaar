@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-import { useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext();
 
@@ -12,19 +11,22 @@ export default function useAuth() {
 
 export function AuthContextProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [currentUser, setCurrentUser] = useState(null);
 
-    async function signup(email, password, confirmPassword) {
+    const signup = async (username, email, password, confirmPassword) => {
 
         if (password === confirmPassword) {
-            if (email && password) {
+            if (username && email && password) {
 
-                const res = await fetch(import.meta.env.VITE_API_URL + '/api/sign', {
+                const res = await fetch(import.meta.env.VITE_API_URL + '/api/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     credentials: 'include',
                     body: JSON.stringify({
+                        username: username,
                         email: email,
                         password: password,
                     })
@@ -46,7 +48,7 @@ export function AuthContextProvider({ children }) {
 
     }
 
-    async function login(email, password) {
+    const login = async (email, password) => {
 
         if (email && password) {
 
@@ -72,15 +74,8 @@ export function AuthContextProvider({ children }) {
         }
     }
 
-    async function checkIsLoggedIn() {
-        let res = await fetch(import.meta.env.VITE_API_URL + '/api/login', {
-            credentials: 'include'
-        });
-        res = await res.json();
-        setIsLoggedIn(res.isLoggedIn ? res.isLoggedIn : false);
-    }
 
-    async function logout() {
+    const logout = async () => {
 
         // let res = await fetch(import.meta.env.VITE_API_URL + '/api/logout', {
         //     credentials: 'include'
@@ -89,6 +84,34 @@ export function AuthContextProvider({ children }) {
         // setIsLoggedIn(res.isLoggedIn ? res.isLoggedIn : false);
     }
 
+
+
+    const getUser = async (isLoggedIn) => {
+
+        if (isLoggedIn) {
+            let res = await fetch(import.meta.env.VITE_API_URL + '/api/users/data', {
+                credentials: 'include'
+            });
+            res = await res.json();
+            setCurrentUser(res.data);
+        }
+
+    }
+
+    const checkIsLoggedIn = async () => {
+        let res = await fetch(import.meta.env.VITE_API_URL + '/api/login', {
+            credentials: 'include'
+        });
+        res = await res.json();
+        await getUser(res.isLoggedIn);
+        setIsLoggedIn(res.isLoggedIn);
+        setLoading(false);
+        return res;
+
+    }
+
+
+
     const valuesObj = {
         signup,
         login,
@@ -96,13 +119,19 @@ export function AuthContextProvider({ children }) {
         checkIsLoggedIn,
         isLoggedIn,
         setIsLoggedIn,
+        currentUser,
+        setCurrentUser,
     }
+
+    useEffect(() => {
+        checkIsLoggedIn();
+    }, [])
 
 
 
     return (
         <AuthContext.Provider value={valuesObj}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     )
 }
