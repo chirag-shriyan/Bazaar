@@ -1,10 +1,13 @@
-import React, { useRef } from 'react'
-import Admin from './Admin'
-import { Button } from '@mui/material';
-import { useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+
 import { FirebaseStorage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+
+import { Button } from '@mui/material';
+
 import useTopLoading from '../../contexts/topLoadingContext';
+import CustomAlert from '../states/CustomAlert';
+import Admin from './Admin';
 
 export default function AddProduct() {
 
@@ -18,8 +21,9 @@ export default function AddProduct() {
     const [productQuantity, setProductQuantity] = useState(0);
     const [productCategories, setProductCategories] = useState(defaultSelected);
     const [productImage, setProductImage] = useState(null);
-    const [error, setError] = useState('');
 
+    const [alert, setAlert] = useState({ message: '', showAlert: false, type: 'error' });
+    console.log(alert);
     const imageRef = useRef();
 
     const goToNextInput = (e) => {
@@ -34,7 +38,7 @@ export default function AddProduct() {
     }
 
     const uploadImage = async (image) => {
-        setError('');
+
         if (new RegExp('image/').test(image.type)) {
             const imageName = `${new Date().toJSON()}-${image.name}`;
             const ImageRef = ref(FirebaseStorage, `Product Images/${imageName}`);
@@ -45,7 +49,8 @@ export default function AddProduct() {
             return ImageUrl
         }
         else {
-            setError('Your image should be a image file');
+            setAlert({ message: 'Your image should be a image file', showAlert: true, type: 'error' });
+
             imageRef.current.value = '';
             setProductImage(null);
             setTopLoadingProgress(100);
@@ -55,10 +60,8 @@ export default function AddProduct() {
 
     const createProduct = async (e) => {
         e.preventDefault();
-        setError('');
-
+   
         if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImage) {
-
             setTopLoadingProgress(30);
             const productImageUrl = await uploadImage(productImage);
 
@@ -100,35 +103,36 @@ export default function AddProduct() {
 
         }
         else {
-            setError('');
             if (!productName) {
-                setError('Name is required');
+                setAlert({ message: 'Name is required', showAlert: true, type: 'error' });
             }
             else if (!productDescription) {
-                setError('Description is required');
+                setAlert({ message: 'Description is required', showAlert: true, type: 'error' });
             }
             else if (!productPrice) {
-                setError('Price is required and should be greater than 0');
+                setAlert({ message: 'Price is required and should be greater than 0', showAlert: true, type: 'error' });
             }
             else if (!productQuantity) {
-                setError('Quantity is required and should be greater than 0');
+                setAlert({ message: 'Quantity is required and should be greater than 0', showAlert: true, type: 'error' });
             }
             else if (!productImage) {
-                setError('Image is required');
+                setAlert({ message: 'Image is required', showAlert: true, type: 'error' });
             }
             else if (productCategories === defaultSelected) {
-                setError('Categories is required');
+                setAlert({ message: 'Categories is required', showAlert: true, type: 'error' });
             }
 
         }
 
     }
-
+    
     return (
 
         <Admin title={'Add Product'}>
 
             <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
+
+                <CustomAlert message={alert.message} showAlert={alert.showAlert} setShowAlert={setAlert} alertType={alert.type} />
 
                 <label htmlFor="name" className='font-bold text-xl'>Product name</label>
                 <input autoFocus type='text' id='name' placeholder='Product name'
@@ -184,9 +188,6 @@ export default function AddProduct() {
                     }
                     <option>- - Select - -</option>
                 </select>
-
-                {/* Errors */}
-                {error && <b className='text-red-600'>{error}</b>}
 
                 <Button variant='contained' className='!mt-4 h-10' onClick={createProduct}>Create Product</Button>
 
