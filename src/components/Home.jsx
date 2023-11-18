@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useAuth from '../contexts/authContext'
+import Navbar from './Navbar';
 
 export default function Home() {
 
@@ -13,6 +14,8 @@ export default function Home() {
   return (
 
     <>
+      <Navbar/>
+
       <div>Home</div>
       {currentUser && <h1 className='text-3xl font-bold'>User: {currentUser.email}</h1>}
       <br />

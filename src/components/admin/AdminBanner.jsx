@@ -10,7 +10,8 @@ export default function AdminBanner() {
 
     const { setTopLoadingProgress } = useTopLoading();
 
-    const [productImage, setProductImage] = useState(null);
+    const [bannerImage, setBannerImage] = useState(null);
+    const [updateBanner, setUpdateBanner] = useState(false);
     const [error, setError] = useState('');
     const imageRef = useRef();
 
@@ -32,38 +33,39 @@ export default function AdminBanner() {
 
             await uploadBytes(ImageRef, image);
             const ImageUrl = await getDownloadURL(ref(FirebaseStorage, `Banner Images/Banner`));
-
+            setTopLoadingProgress(100);
             return ImageUrl
         }
         else {
             setError('Your image should be a image file');
             imageRef.current.value = '';
-            setProductImage(null);
+            setBannerImage(null);
             setTopLoadingProgress(100);
             return null
         }
     }
 
     const changeImage = async () => {
-        if (productImage) {
+        if (bannerImage) {
             alert('Press ok to continue with the process');
+
             setTopLoadingProgress(40);
-            const url = await uploadImage(productImage);
-            await fetch(import.meta.env.VITE_API_URL + '/api/banner', {
+            const url = await uploadImage(bannerImage);
+            const res = await fetch(import.meta.env.VITE_API_URL + '/api/banner', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({
-                    image: url,
-                    adminToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1M2E3YTBlMjExNjkwYjM4MTg5M2M1MiIsImlhdCI6MTY5OTg3MDExM30.wsTv6yAhi2kFDoqoyJ8UjHCGw_8FKg6Fp4DoO7uC-68'
+                    image: url
                 })
             });
 
+            setUpdateBanner(true);
             setTopLoadingProgress(100);
             imageRef.current.value = '';
-            setProductImage(null);
-            setUpdateBanner(true);
+            setBannerImage(null);
         }
     }
 
@@ -72,14 +74,14 @@ export default function AdminBanner() {
 
             <div className=''>
 
-                <Banner />
+                <Banner updateBanner={updateBanner} />
 
                 <form className='mt-10 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
 
                     <label htmlFor="image" className='font-bold text-xl'>Change Image</label>
                     <input type='file' id='image' placeholder='Product quantity'
                         className='w-[500px] max-w-[500px] p-1 py-2 border border-black rounded max-sm:w-[320px]'
-                        onChange={(e) => setProductImage(e.target.files[0])}
+                        onChange={(e) => setBannerImage(e.target.files[0])}
                         ref={imageRef}
                     />
 

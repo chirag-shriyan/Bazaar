@@ -39,7 +39,7 @@ export default function Signup() {
 
     }
     return (
-        <form className='mt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>
+        <form className='pt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>
 
             <h1 className='text-4xl font-bold mb-5'>Signup</h1>
 
@@ -78,8 +78,7 @@ export default function Signup() {
 
             <div className='flex justify-between'>
 
-                <Link className='text-blue-500'>Forgot password?</Link>
-                <Link to={'/signup'} className='text-blue-500'>Doesn't have a account?</Link>
+                <Link to={'/login'} className='text-blue-500'>Already have a account?</Link>
 
             </div>
 

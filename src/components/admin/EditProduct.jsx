@@ -164,7 +164,7 @@ export default function EditProduct() {
 
         product ?
 
-            <form className='mt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
+            <form className='pt-28 space-y-2 w-full grid place-content-center max-sm:mt-0' onSubmit={(e) => { goToNextInput(e) }}>
 
                 <label htmlFor="name" className='font-bold text-xl'>Product name</label>
                 <input autoFocus type='text' id='name' placeholder='Product name'

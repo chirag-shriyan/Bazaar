@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-export default function Banner() {
+export default function Banner({ updateBanner }) {
 
     const [Banner, setBanner] = useState();
 
@@ -10,10 +10,13 @@ export default function Banner() {
         setBanner(url);
     }
 
-    useState(() => {
+    useEffect(() => {
         getBanner();
     }, []);
 
+    useEffect(() => {
+        updateBanner && getBanner();
+    }, [updateBanner]);
     return (
 
         <>
