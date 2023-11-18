@@ -23,7 +23,7 @@ export default function AddProduct() {
     const [productImage, setProductImage] = useState(null);
 
     const [alert, setAlert] = useState({ message: '', showAlert: false, type: 'error' });
-    console.log(alert);
+
     const imageRef = useRef();
 
     const goToNextInput = (e) => {
@@ -46,11 +46,10 @@ export default function AddProduct() {
             await uploadBytes(ImageRef, image);
             const ImageUrl = await getDownloadURL(ref(FirebaseStorage, `Product Images/${imageName}`));
 
-            return ImageUrl
+            return { ImageUrl, imageName }
         }
         else {
             setAlert({ message: 'Your image should be a image file', showAlert: true, type: 'error' });
-
             imageRef.current.value = '';
             setProductImage(null);
             setTopLoadingProgress(100);
@@ -60,24 +59,26 @@ export default function AddProduct() {
 
     const createProduct = async (e) => {
         e.preventDefault();
-   
+
         if (productName && productDescription && productPrice > 0 && productQuantity > 0 && productCategories !== defaultSelected && productImage) {
             setTopLoadingProgress(30);
-            const productImageUrl = await uploadImage(productImage);
-
-            if (productImageUrl) {
-                let res = await fetch(import.meta.env.VITE_API_URL + '/api/products', {
+            const { ImageUrl, imageName } = await uploadImage(productImage);
+            console.log(imageName);
+            if (ImageUrl && imageName) {
+                const res = await fetch(import.meta.env.VITE_API_URL + '/api/products', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    credentials: 'include',
                     body: JSON.stringify(
                         {
                             "name": productName,
                             "description": productDescription,
                             "price": productPrice,
                             "quantity": productQuantity,
-                            "image": productImageUrl,
+                            "image": ImageUrl,
+                            "imageName": imageName,
                             "categories": productCategories
                         }
                     )
@@ -86,8 +87,15 @@ export default function AddProduct() {
 
                 setTopLoadingProgress(70);
 
-                res = await res.json();
-                console.log(res);
+                const resData = await res.json();
+                console.log(resData);
+
+                if (resData.status >= 200 && resData.status < 400) {
+                    setAlert({ message: 'Products is successfully created', showAlert: true, type: 'success' });
+                }
+                else {
+                    setAlert({ message: resData.message, showAlert: true, type: 'error' });
+                }
 
                 setTopLoadingProgress(100);
 
@@ -125,7 +133,8 @@ export default function AddProduct() {
         }
 
     }
-    
+
+
     return (
 
         <Admin title={'Add Product'}>

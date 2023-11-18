@@ -103,6 +103,7 @@ export default function EditProduct() {
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    credentials: 'include',
                     body: JSON.stringify(
                         {
                             "name": productName,
@@ -116,7 +117,7 @@ export default function EditProduct() {
                 });
 
                 setTopLoadingProgress(70);
-
+      
                 res = await res.json();
                 setTopLoadingProgress(100);
             }

@@ -12,7 +12,8 @@ export default function CustomAlert({ message, showAlert, setShowAlert, alertTyp
       setShowAlert(false);
     }, 5000);
     return () => clearTimeout(timer);
-  }, [showAlert])
+  }, [message]);
+
   return (
 
     showAlert && <div className='w-full grid justify-items-center'>
@@ -35,7 +36,7 @@ export default function CustomAlert({ message, showAlert, setShowAlert, alertTyp
         }
       >
 
-        <strong>{message}</strong>
+        <strong>{message.length >= 50 ? message : message.substring(0, 50) + '...'}</strong>
       </Alert>
 
     </div>

@@ -31,7 +31,8 @@ export default function AllProducts() {
 
         if (confirm?.toLocaleLowerCase() === 'i understand') {
             let res = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${productId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                credentials: 'include'
             });
             res = await res.json();
             await getProducts();
