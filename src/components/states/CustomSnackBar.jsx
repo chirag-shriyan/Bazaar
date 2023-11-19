@@ -1,7 +1,7 @@
 import React from 'react'
 import useSnackbar from '../../contexts/snackbarContext'
 
-import { IconButton, Snackbar } from '@mui/material'
+import { IconButton, Snackbar, Typography } from '@mui/material'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 export default function CustomSnackBar() {
@@ -30,12 +30,13 @@ export default function CustomSnackBar() {
 
     return (
         <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: snackbar.vertical || 'bottom', horizontal: snackbar.horizontal || 'right' }}
             open={snackbar.showSnackbar}
             autoHideDuration={snackbar.autoHide}
             onClose={handleClose}
-            message={snackbar.message}
+            message={<Typography noWrap>{snackbar.message}</Typography>}
             action={action}
+
         />
     )
 }

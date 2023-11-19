@@ -8,7 +8,7 @@ export default function useSnackbar() {
 
 export function SnackbarContextProvider({ children }) {
 
-    const [snackbar, setSnackbar] = useState({ showSnackbar: true, autoHide: 6000, message: 'adadada' });
+    const [snackbar, setSnackbar] = useState({ showSnackbar: false, autoHide: 6000, message: '' });
 
     const valuesObj = {
         snackbar,

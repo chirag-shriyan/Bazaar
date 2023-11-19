@@ -1,12 +1,14 @@
 import { Button } from '@mui/material';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAuth from '../contexts/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
+    const { login, checkIsLoggedIn, isLoggedIn } = useAuth();
     const Navigate = useNavigate();
-    const { login, checkIsLoggedIn } = useAuth();
+    const pathname = location.pathname;
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -34,6 +36,10 @@ export default function Login() {
             setError(res.message);
         }
     }
+
+    useEffect(() => {
+        isLoggedIn && Navigate('/');
+    }, [isLoggedIn]);
 
     return (
         <form className='pt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>

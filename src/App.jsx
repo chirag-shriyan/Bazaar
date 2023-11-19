@@ -24,21 +24,7 @@ import CustomSnackBar from "./components/states/CustomSnackBar";
 function App() {
 
   const { topLoadingProgress, setTopLoadingProgress } = useTopLoading();
-  const { isLoggedIn } = useAuth();
-  const user = true;
-  const pathname = location.pathname;
-  const Navigate = useNavigate();
-
-
-
-
-  useEffect(() => {
-
-    if (isLoggedIn && (pathname === '/login' || pathname === '/signup')) {
-      Navigate('/');
-    }
-
-  }, [isLoggedIn]);
+  const { currentUser } = useAuth();
 
 
   return (
@@ -56,7 +42,9 @@ function App() {
 
       <Routes>
 
-        {user &&
+        {/* Admin Only */}
+        {currentUser.role &&
+          currentUser.role[0] === 'superAdmin' &&
           <>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/add-product" element={<AddProduct />} />
@@ -67,11 +55,15 @@ function App() {
           </>
         }
 
+        {/* All Users  */}
         <Route path="/" element={<Home />} />
+        <Route path="/products/:id" element={<h1>Work in progress</h1>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
+        {/* 404 | Not Found  */}
         <Route path="/*" element={<NotFound />} />
+
       </Routes>
 
     </>

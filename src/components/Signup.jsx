@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useAuth from '../contexts/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 export default function Signup() {
-    const Navigate = useNavigate();
 
-    const { signup, checkIsLoggedIn } = useAuth();
+    const { signup, checkIsLoggedIn, isLoggedIn } = useAuth();
+    const Navigate = useNavigate();
+    const pathname = location.pathname;
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -38,6 +39,11 @@ export default function Signup() {
         }
 
     }
+
+    useEffect(() => {
+        isLoggedIn && Navigate('/');
+    }, [isLoggedIn]);
+    
     return (
         <form className='pt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>
 

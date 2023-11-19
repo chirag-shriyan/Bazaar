@@ -15,8 +15,8 @@ export default function Home() {
 
     <>
       <Navbar />
-
-      <div>Home</div>
+      
+      <br />
       <h1 className='text-3xl font-bold'>User: {currentUser.email}</h1>
       <h1 className='text-3xl font-bold'>Role: {currentUser.role ? currentUser.role[0] : 'No Role'}</h1>
       <br />
