@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import Logo from '../../public/logo.svg'
 import { Link } from 'react-router-dom'
-import { Avatar, Menu, MenuItem, Typography } from '@mui/material'
+import { Avatar, ListItemIcon, Menu, MenuItem } from '@mui/material'
 import useAuth from '../contexts/authContext';
+
+import { TbLogout2 } from "react-icons/tb";
+import { IoSettings } from "react-icons/io5";
 
 export default function Navbar() {
 
   const { currentUser } = useAuth();
-  console.log(currentUser?.username);
-
+  console.log(currentUser);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -32,35 +34,69 @@ export default function Navbar() {
           </h1>
         </Link>
 
-        <div className='flex items-center'>
+        <div className='flex items-center m-2'>
 
-          <Avatar className='hover:cursor-pointer' onClick={handleClick}>
-
+          <Avatar className='hover:cursor-pointer grid justify-items-center' onClick={handleClick}>
             {currentUser?.username.charAt(0)}
-
           </Avatar>
+
           <Menu
-            id="basic-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-
+            onClick={handleClose}
             PaperProps={{
-              sx: { marginTop: '5px', width: '200px',left:1000},
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                width: 180,
+                padding: '8px',
+                '& .MuiAvatar-root': {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
 
+                },
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
             }}
-
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <h1 className='m-2 text-xl font-bold'> {currentUser?.username}</h1>
-            <MenuItem >Profile</MenuItem>
-            <MenuItem >My account</MenuItem>
-            <MenuItem >Logout</MenuItem>
-          </Menu>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> Profile
+            </MenuItem>
 
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <IoSettings className='text-3xl relative right-1' />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <TbLogout2 className='text-3xl relative right-[5px]' />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+
+          </Menu>
         </div>
+
       </div>
 
 

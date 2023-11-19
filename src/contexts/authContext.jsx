@@ -89,10 +89,11 @@ export function AuthContextProvider({ children }) {
     const getUser = async (isLoggedIn) => {
 
         if (isLoggedIn) {
-            let res = await fetch(import.meta.env.VITE_API_URL + '/api/users/data', {
+            let res = await fetch(import.meta.env.VITE_API_URL + '/api/users/user', {
                 credentials: 'include'
             });
             res = await res.json();
+            console.log(res);
             setCurrentUser(res.data);
         }
 

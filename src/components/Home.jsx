@@ -14,10 +14,11 @@ export default function Home() {
   return (
 
     <>
-      <Navbar/>
+      <Navbar />
 
       <div>Home</div>
-      {currentUser && <h1 className='text-3xl font-bold'>User: {currentUser.email}</h1>}
+      <h1 className='text-3xl font-bold'>User: {currentUser.email}</h1>
+      <h1 className='text-3xl font-bold'>Role: {currentUser.role ? currentUser.role[0] : 'No Role'}</h1>
       <br />
 
       <Link to={'/login'}>Log In</Link>

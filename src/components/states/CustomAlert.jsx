@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { Alert, IconButton } from '@mui/material'
+import { Alert, IconButton, Typography } from '@mui/material'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 
@@ -36,7 +36,8 @@ export default function CustomAlert({ message, showAlert, setShowAlert, alertTyp
         }
       >
 
-        <strong>{message.length >= 50 ? message : message.substring(0, 50) + '...'}</strong>
+        <strong>{message.length >= 50 ? message.substring(0, 50) + '...' : message} </strong>
+
       </Alert>
 
     </div>

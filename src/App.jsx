@@ -16,6 +16,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import Signup from "./components/Signup";
+import CustomSnackBar from "./components/states/CustomSnackBar";
 
 
 
@@ -50,6 +51,8 @@ function App() {
         progress={topLoadingProgress}
         onLoaderFinished={() => setTopLoadingProgress(0)}
       />
+
+      <CustomSnackBar />
 
       <Routes>
 
