@@ -12,7 +12,7 @@ export default function useAuth() {
 export function AuthContextProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState({ username: null, email: null, role: null });
 
     const signup = async (username, email, password, confirmPassword) => {
 
@@ -75,13 +75,16 @@ export function AuthContextProvider({ children }) {
     }
 
 
-    const logout = async () => {
+    const logout = async (verified) => {
 
-        // let res = await fetch(import.meta.env.VITE_API_URL + '/api/logout', {
-        //     credentials: 'include'
-        // });
-        // res = await res.json();
-        // setIsLoggedIn(res.isLoggedIn ? res.isLoggedIn : false);
+        let res = await fetch(import.meta.env.VITE_API_URL + '/api/logout', {
+            credentials: 'include'
+        });
+        res = await res.json();
+        console.log(!res.status === 200 && true);
+        setIsLoggedIn(!res.status === 200 && true);
+        setCurrentUser({ username: null, email: null, role: null })
+        return res;
     }
 
 

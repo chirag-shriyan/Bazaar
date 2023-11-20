@@ -6,11 +6,13 @@ import useAuth from '../contexts/authContext';
 
 import { TbLogout2 } from "react-icons/tb";
 import { IoSettings } from "react-icons/io5";
+import useSnackbar from '../contexts/snackbarContext';
 
 export default function Navbar() {
 
-  const { currentUser } = useAuth();
-  console.log(currentUser);
+  const { currentUser, logout, isLoggedIn } = useAuth();
+  const { setSnackbar } = useSnackbar();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -21,6 +23,15 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = async () => {
+
+    if (isLoggedIn) {
+      await logout();
+      setSnackbar({ message: 'Logged out', showSnackBar: true });
+      handleClose();
+    }
+  }
 
   return (
     <div className='w-full h-16 bg-black grid justify-items-center'>
@@ -37,7 +48,7 @@ export default function Navbar() {
         <div className='flex items-center m-2'>
 
           <Avatar className='hover:cursor-pointer grid justify-items-center' onClick={handleClick}>
-            {currentUser?.username.charAt(0)}
+            {currentUser?.username?.charAt(0).toUpperCase()}
           </Avatar>
 
           <Menu
@@ -58,7 +69,6 @@ export default function Navbar() {
                   height: 32,
                   ml: -0.5,
                   mr: 1,
-
                 },
                 '&:before': {
                   content: '""',
@@ -77,17 +87,19 @@ export default function Navbar() {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <MenuItem onClick={handleClose}>
-              <Avatar /> Profile
+
+            <MenuItem onClick={handleClose} tabIndex={-1} className='!rounded-md !mb-1'>
+              <Avatar />Profile
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
               <ListItemIcon>
                 <IoSettings className='text-3xl relative right-1' />
               </ListItemIcon>
               Settings
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+
+            <MenuItem onClick={handleLogout} className='!rounded-md !mb-1'>
               <ListItemIcon>
                 <TbLogout2 className='text-3xl relative right-[5px]' />
               </ListItemIcon>

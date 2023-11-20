@@ -1,7 +1,7 @@
 import React from 'react'
 import useSnackbar from '../../contexts/snackbarContext'
 
-import { IconButton, Snackbar, Typography } from '@mui/material'
+import { Alert, IconButton, Snackbar, Typography } from '@mui/material'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 export default function CustomSnackBar() {
@@ -31,12 +31,33 @@ export default function CustomSnackBar() {
     return (
         <Snackbar
             anchorOrigin={{ vertical: snackbar.vertical || 'bottom', horizontal: snackbar.horizontal || 'right' }}
-            open={snackbar.showSnackbar}
-            autoHideDuration={snackbar.autoHide}
+            open={snackbar.showSnackBar}
+            autoHideDuration={snackbar.autoHide || 6000}
             onClose={handleClose}
-            message={<Typography noWrap>{snackbar.message}</Typography>}
-            action={action}
+            message={!snackbar.type && snackbar.message}
+            action={!snackbar.type && action}
 
-        />
+        >
+
+            {snackbar.type &&
+                <Alert severity={snackbar.type} sx={{ width: '100%' }}
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="info"
+                            size="small"
+                            onClick={handleClose}
+                        >
+                            <IoCloseCircleOutline className='text-2xl relative bottom-[2px]' />
+                        </IconButton>
+                    }
+                >
+
+                    <Typography noWrap>{snackbar.message}</Typography>
+                </Alert>
+
+            }
+
+        </Snackbar >
     )
 }
