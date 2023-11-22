@@ -2,11 +2,15 @@ import { useState } from 'react'
 import Logo from '../../public/logo.svg'
 import { Link } from 'react-router-dom'
 import { Avatar, ListItemIcon, Menu, MenuItem } from '@mui/material'
+
 import useAuth from '../contexts/authContext';
+import useSnackbar from '../contexts/snackbarContext';
 
 import { TbLogout2 } from "react-icons/tb";
 import { IoSettings } from "react-icons/io5";
-import useSnackbar from '../contexts/snackbarContext';
+import { IoPersonAddOutline } from "react-icons/io5";
+import { FiLogIn } from "react-icons/fi";
+// import { FiLogIn } from "react-icons/fi";
 
 export default function Navbar() {
 
@@ -28,8 +32,8 @@ export default function Navbar() {
 
     if (isLoggedIn) {
       await logout();
-      setSnackbar({ message: 'Logged out', showSnackBar: true });
       handleClose();
+      setSnackbar({ message: 'Logged out', showSnackBar: true });
     }
   }
 
@@ -51,62 +55,124 @@ export default function Navbar() {
             {currentUser?.username?.charAt(0).toUpperCase()}
           </Avatar>
 
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                width: 180,
-                padding: '8px',
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
+          {isLoggedIn ?
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  width: 180,
+                  padding: '8px',
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
                 },
-                '&:before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem className='!hidden' />
+
+              <MenuItem onClick={handleClose} tabIndex={-1} className='!rounded-md !mb-1'>
+                <Avatar />Profile
+              </MenuItem>
+
+              <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
+                <ListItemIcon>
+                  <IoSettings className='text-3xl relative right-1' />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+
+              <MenuItem onClick={handleLogout} className='!rounded-md !mb-1'>
+                <ListItemIcon>
+                  <TbLogout2 className='text-3xl relative right-[5px]' />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+
+            </Menu>
+            :
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  width: 180,
+                  padding: '8px',
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
                 },
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem className='!hidden' />
 
-            <MenuItem onClick={handleClose} tabIndex={-1} className='!rounded-md !mb-1'>
-              <Avatar />Profile
-            </MenuItem>
+              <Link to={'/login'}>
+                <MenuItem className='!rounded-md !mb-1'>
+                  <ListItemIcon>
+                    <FiLogIn className='text-3xl relative right-2' />
+                  </ListItemIcon>
+                  Log In
+                </MenuItem>
+              </Link>
 
-            <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
-              <ListItemIcon>
-                <IoSettings className='text-3xl relative right-1' />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
+              <Link to={'/signup'}>
+                <MenuItem className='!rounded-md !mb-1'>
+                  <ListItemIcon>
+                    <IoPersonAddOutline className='text-3xl relative right-2' />
+                  </ListItemIcon>
+                  Sign Up
+                </MenuItem>
+              </Link>
 
-            <MenuItem onClick={handleLogout} className='!rounded-md !mb-1'>
-              <ListItemIcon>
-                <TbLogout2 className='text-3xl relative right-[5px]' />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
+            </Menu>
+          }
 
-          </Menu>
         </div>
 
       </div>

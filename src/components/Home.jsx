@@ -5,8 +5,10 @@ import Navbar from './Navbar';
 
 export default function Home() {
 
-  const { currentUser } = useAuth();
+  const { currentUser, hasRole } = useAuth();
 
+  const superAdmin = currentUser.roles && hasRole(currentUser.roles, 'superAdmin');
+  console.log(superAdmin);
   useEffect(() => {
     document.title = `Bazaar | Home`
   }, [])
@@ -15,10 +17,10 @@ export default function Home() {
 
     <>
       <Navbar />
-      
+
       <br />
       <h1 className='text-3xl font-bold'>User: {currentUser.email}</h1>
-      <h1 className='text-3xl font-bold'>Role: {currentUser.role ? currentUser.role[0] : 'No Role'}</h1>
+      <h1 className='text-3xl font-bold'>Role: {superAdmin ? 'superAdmin' : 'No Role'}</h1>
       <br />
 
       <Link to={'/login'}>Log In</Link>

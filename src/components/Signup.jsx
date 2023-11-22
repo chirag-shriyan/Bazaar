@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import useAuth from '../contexts/authContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate as Redirect } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 export default function Signup() {
@@ -40,7 +40,7 @@ export default function Signup() {
     }
 
     return (
-        isLoggedIn ? history.back() :
+        isLoggedIn ? <Redirect to={'/'} /> :
             <form className='pt-28 space-y-2 w-full grid place-content-center' onSubmit={(e) => { goToNextInput(e) }}>
 
                 <h1 className='text-4xl font-bold mb-5'>Signup</h1>

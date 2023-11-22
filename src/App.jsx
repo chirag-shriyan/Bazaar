@@ -24,9 +24,8 @@ import CustomSnackBar from "./components/states/CustomSnackBar";
 function App() {
 
   const { topLoadingProgress, setTopLoadingProgress } = useTopLoading();
-  const { currentUser } = useAuth();
-
-
+  const { currentUser, hasRole } = useAuth();
+  const isSuperAdmin = currentUser.roles && hasRole(currentUser.roles, 'superAdmin');
   return (
     <>
 
@@ -43,8 +42,7 @@ function App() {
       <Routes>
 
         {/* Admin Only */}
-        {currentUser.role &&
-          currentUser.role[0] === 'superAdmin' &&
+        {isSuperAdmin &&
           <>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/add-product" element={<AddProduct />} />

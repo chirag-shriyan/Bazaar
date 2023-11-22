@@ -75,7 +75,7 @@ export function AuthContextProvider({ children }) {
     }
 
 
-    const logout = async (verified) => {
+    const logout = async () => {
 
         let res = await fetch(import.meta.env.VITE_API_URL + '/api/logout', {
             credentials: 'include'
@@ -114,6 +114,17 @@ export function AuthContextProvider({ children }) {
 
     }
 
+    function hasRole(roleArr, findRole) {
+
+        for (let i = 0; i < roleArr.length; i++) {
+            const role = roleArr[i];
+            if (role === findRole) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     const valuesObj = {
@@ -121,6 +132,7 @@ export function AuthContextProvider({ children }) {
         login,
         logout,
         checkIsLoggedIn,
+        hasRole,
         isLoggedIn,
         setIsLoggedIn,
         currentUser,
