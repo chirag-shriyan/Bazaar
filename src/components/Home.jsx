@@ -21,10 +21,10 @@ export default function Home() {
 
 
   useEffect(() => {
-    getProducts()
-    document.title = `Bazaar | Home`
+    getProducts();
+    document.title = `Bazaar | Home`;
   }, [])
-  // console.log(currentUser);
+
   return (
 
     <>

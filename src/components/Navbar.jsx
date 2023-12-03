@@ -11,11 +11,14 @@ import { IoSettings } from "react-icons/io5";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiLogIn } from "react-icons/fi";
 import { FaShoppingCart } from "react-icons/fa";
+import Cart from './Cart';
 
 export default function Navbar() {
 
   const { currentUser, logout, isLoggedIn } = useAuth();
   const { setSnackbar } = useSnackbar();
+
+  const [cartOpen, setCartOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -28,6 +31,17 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  const cartToggle = () => {
+    if (cartOpen) {
+      setCartOpen(false);
+      handleClose();
+    }
+    else {
+      setCartOpen(true);
+      handleClose();
+    }
+  }
+
   const handleLogout = async () => {
 
     if (isLoggedIn) {
@@ -39,6 +53,7 @@ export default function Navbar() {
 
   return (
     <div className='w-full h-16 bg-black grid justify-items-center'>
+      <Cart cartOpen={cartOpen} setCartOpen={setCartOpen} />
 
       <div className='w-full h-16 container flex justify-between '>
 
@@ -51,9 +66,11 @@ export default function Navbar() {
 
         <div className='flex items-center m-2 space-x-5'>
 
-          <Badge badgeContent={1} color='primary' className='cursor-pointer badge-red'>
-            <FaShoppingCart className='text-white text-3xl'/>
-          </Badge>
+          <div onClick={cartToggle}>
+            <Badge badgeContent={1} color='primary' className='cursor-pointer badge-red'>
+              <FaShoppingCart className='text-white text-3xl' />
+            </Badge>
+          </div>
 
           <Avatar className='hover:cursor-pointer grid justify-items-center' onClick={handleClick}>
             {currentUser?.username?.charAt(0).toUpperCase()}
@@ -113,7 +130,7 @@ export default function Navbar() {
                 Settings
               </MenuItem>
 
-              <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
+              <MenuItem onClick={cartToggle} className='!rounded-md !mb-1'>
                 <ListItemIcon>
                   <FaShoppingCart className='text-3xl relative right-1' />
                 </ListItemIcon>

@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, Typography } from '@mui/material'
+import { Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -30,7 +30,7 @@ export default function MinProduct({ products }) {
                                 <CardContent>
                                     <Typography variant="p" color="text.secondary">
                                         <div className='flex flex-col'>
-                                            <b>Price: {product.price} | Quantity: {product.quantity}</b>
+                                            <b>Price: ₹{product.price} | Quantity: {product.quantity}</b>
                                             <b>Categories: {product.categories}</b>
                                         </div>
                                     </Typography>

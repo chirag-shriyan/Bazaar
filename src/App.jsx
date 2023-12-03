@@ -1,5 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 
 import LoadingBar from "react-top-loading-bar";
 import useTopLoading from "./contexts/topLoadingContext";
