@@ -81,7 +81,6 @@ export function AuthContextProvider({ children }) {
             credentials: 'include'
         });
         res = await res.json();
-        console.log(!res.status === 200 && true);
         setIsLoggedIn(!res.status === 200 && true);
         setCurrentUser({ username: null, email: null, role: null })
         return res;
@@ -96,7 +95,6 @@ export function AuthContextProvider({ children }) {
                 credentials: 'include'
             });
             res = await res.json();
-            console.log(res);
             setCurrentUser(res.data);
         }
 

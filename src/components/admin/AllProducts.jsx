@@ -82,10 +82,11 @@ export default function AllProducts() {
                             <div key={product._id}>
                                 <Card sx={{ maxWidth: 545, minWidth: 300 }} >
                                     <img
-                                        className='w-full aspect-[3/2] object-fill'
+                                        className='w-full aspect-[3/2] object-contain'
                                         src={product.image ? product.image : ImageNotFound}
 
                                     />
+
                                     <CardContent>
                                         <Typography gutterBottom variant="h5" component="div">
                                             {product.name}
@@ -95,6 +96,7 @@ export default function AllProducts() {
                                         </Typography>
 
                                     </CardContent>
+
                                     <CardContent>
                                         <Typography variant="p" color="text.secondary">
                                             <div className='flex flex-col'>
@@ -121,6 +123,7 @@ export default function AllProducts() {
                                             </Button>
                                         </div>
                                     </CardActions>
+
                                 </Card>
                             </div>
                         )

@@ -17,6 +17,7 @@ import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import Signup from "./components/Signup";
 import CustomSnackBar from "./components/states/CustomSnackBar";
+import Product from "./components/Product";
 
 
 
@@ -55,12 +56,13 @@ function App() {
 
         {/* All Users  */}
         <Route path="/" element={<Home />} />
-        <Route path="/products/:id" element={<h1>Work in progress</h1>} />
+        <Route path="/products/:id" element={<Product />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* 404 | Not Found  */}
         <Route path="/*" element={<NotFound />} />
+        <Route path="/not-found" element={<NotFound />} />
 
       </Routes>
 

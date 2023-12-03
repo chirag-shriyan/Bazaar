@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Logo from '../../public/logo.svg'
 import { Link } from 'react-router-dom'
-import { Avatar, ListItemIcon, Menu, MenuItem } from '@mui/material'
+import { Avatar, Badge, ListItemIcon, Menu, MenuItem } from '@mui/material'
 
 import useAuth from '../contexts/authContext';
 import useSnackbar from '../contexts/snackbarContext';
@@ -10,7 +10,7 @@ import { TbLogout2 } from "react-icons/tb";
 import { IoSettings } from "react-icons/io5";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { FiLogIn } from "react-icons/fi";
-// import { FiLogIn } from "react-icons/fi";
+import { FaShoppingCart } from "react-icons/fa";
 
 export default function Navbar() {
 
@@ -49,11 +49,16 @@ export default function Navbar() {
           </h1>
         </Link>
 
-        <div className='flex items-center m-2'>
+        <div className='flex items-center m-2 space-x-5'>
+
+          <Badge badgeContent={1} color='primary' className='cursor-pointer badge-red'>
+            <FaShoppingCart className='text-white text-3xl'/>
+          </Badge>
 
           <Avatar className='hover:cursor-pointer grid justify-items-center' onClick={handleClick}>
             {currentUser?.username?.charAt(0).toUpperCase()}
           </Avatar>
+
 
           {isLoggedIn ?
             <Menu
@@ -95,7 +100,10 @@ export default function Navbar() {
               <MenuItem className='!hidden' />
 
               <MenuItem onClick={handleClose} tabIndex={-1} className='!rounded-md !mb-1'>
-                <Avatar />Profile
+                <Avatar>
+                  {currentUser?.username?.charAt(0).toUpperCase()}
+                </Avatar>
+                Profile
               </MenuItem>
 
               <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
@@ -103,6 +111,13 @@ export default function Navbar() {
                   <IoSettings className='text-3xl relative right-1' />
                 </ListItemIcon>
                 Settings
+              </MenuItem>
+
+              <MenuItem onClick={handleClose} className='!rounded-md !mb-1'>
+                <ListItemIcon>
+                  <FaShoppingCart className='text-3xl relative right-1' />
+                </ListItemIcon>
+                Cart
               </MenuItem>
 
               <MenuItem onClick={handleLogout} className='!rounded-md !mb-1'>
