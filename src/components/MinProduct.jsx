@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 export default function MinProduct({ products }) {
 
     return (
-        <div className='w-full grid grid-cols-4 gap-16 max-md:grid-cols-1'>
+        <div className='w-full grid grid-cols-4 gap-16 max-xl:grid-cols-2 max-md:grid-cols-1'>
             {
                 products?.length > 0 && products.map((product) => {
                     return (
